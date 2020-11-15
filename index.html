@@ -1,0 +1,292 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+        <title>OpenStack at OVH</title>
+
+        <link rel="stylesheet" href="css/reveal.css">
+        <link rel="stylesheet" href="css/theme/ovh.css">
+
+        <!-- Theme used for syntax highlighting of code -->
+        <link rel="stylesheet" href="lib/css/zenburn.css">
+
+        <!-- Printing and PDF exports -->
+        <script>
+            var link = document.createElement( 'link' );
+            link.rel = 'stylesheet';
+            link.type = 'text/css';
+            link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+            document.getElementsByTagName( 'head' )[0].appendChild( link );
+        </script>
+    </head>
+    <body>
+        <div class="reveal">
+            <div class="slides">
+                <section data-background="data/ovh-meet-up-brest-digit-event.jpg">
+                    <h1>OpenStack at OVH</h1>
+                    <h2>Automation to infinity and beyond</h2>
+                    <img src="data/logo-ovh-meet-up-small.png"></img>
+                </section>
+
+                <section data-background="data/slide.png">
+                    <section data-markdown>
+                        ## Who am I?
+                        ## What do I do?
+                    </section>
+
+                    <section data-markdown>
+                        ## Arnaud MORIN
+                        #### Deploy
+                        #### Scale
+                        #### Automate
+                        #### Repeat
+                    </section>
+                </section>
+
+                <section data-background="data/slide.png">
+                    <section data-markdown>
+                        ## Yes but what do you deploy?
+                    </section>
+
+                    <section data-markdown data-background="data/nerds2.gif">
+                        # OpenStack
+                        ![OpenStack](data/openstack_logo.png)
+                        ###### well, part of it
+                    </section>
+                </section>
+
+                <section data-background="data/slide.png">
+                    <section data-markdown data-background="data/chien.gif" data-background-color="white">
+                        # OpenStack?
+                        ## What is that?
+                    </section>
+                    <section>
+                        <ul>
+                            <li>Open Source / Free Software (Apache License 2.0)</li>
+                            <li class="fragment">First release in 2010</li>
+                            <li class="fragment">One release every 6 months</li>
+                            <li class="fragment">Written in Python</li>
+                            <li class="fragment">Modular</li>
+                            <li class="fragment">At OVH since 2012 (hubic)</li>
+                            <li class="fragment">OVH Public Cloud since 2015 (first region)</li>
+                        </ul>
+                    </section>
+                    <section data-markdown>
+                        ## What is it for?
+                    </section>
+                    <section>
+                        <ul>
+                            <li>On demand cloud computing</li>
+                            <ul>
+                                <li class="fragment">Instances</li>
+                                <li class="fragment">Networking</li>
+                            </ul>
+
+                            <li class="fragment">Cloud storage</li>
+                            <ul>
+                                <li class="fragment">Objects</li>
+                                <li class="fragment">Blocks (volumes/disks for instances)</li>
+                            </ul>
+                        </ul>
+                    </section>
+                    <section data-markdown data-background="data/blowing.gif">
+                        # awesome!
+
+                    </section>
+                    <section data-markdown>
+                        ##### well, wait, have you seen the architecture?
+                    </section>
+
+                    <section data-markdown data-background="data/osog_0001.png" data-background-color="white" data-background-size="contain">
+                    </section>
+                    <section data-markdown data-background="data/it_crowd_2.gif">
+                    </section>
+                    <section>
+                        <h2>With simple words?</h2>
+                        <ul>
+                            <li class="fragment">Act like an API store</li>
+                            <li class="fragment">You talk with OpenStack using HTTP requests</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h2>Inside?</h2>
+                        <ul>
+                            <li class="fragment">Centered around:</li>
+                            <ul>
+                                <li class="fragment">messaging queue system (usually RabbitMQ)</li>
+                                <li class="fragment">database (usually MariaDB)</li>
+                            </ul>
+                            <li class="fragment">Important modules:</li>
+                            <ul>
+                                <li class="fragment">Nova (computing)</li>
+                                <li class="fragment">Neutron (networking)</li>
+                            </ul>
+                        </ul>
+                    </section>
+                </section>
+
+                <section data-background="data/slide.png">
+                    <section data-markdown data-background="data/nova.gif">
+                        # Nova
+                        #### (computing)
+                    </section>
+
+                    <section>
+                        <h2>2 components</h2>
+                        <ul>
+                            <li class="fragment">Nova API
+                                <ul>
+                                    <li>listen on HTTP requests</li>
+                                </ul>
+                            </li>
+                            <li class="fragment">Nova Compute
+                                <ul>
+                                    <li>run on hypervisor</li>
+                                    <li>wait for orders from API</li>
+                                </ul>
+                            </li>
+                            <li class="fragment">Communicate through MQ</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Example when creating an instance</h2>
+                        <ul>
+                            <li class="fragment">HTTP POST nova-api/instance</li>
+                            <li class="fragment">Nova API adds info in DB</li>
+                            <li class="fragment">Nova API sends a message to Nova Compute</li>
+                            <li class="fragment">Nova compute starts a QEMU process</li>
+                        </ul>
+                    </section>
+                    <section data-markdown data-background="data/smart2.gif">
+                        # Easy!
+                    </section>
+                </section>
+
+                <section data-background="data/slide.png">
+                    <section data-markdown data-background="data/neutron.gif">
+                        # Neutron
+                        #### (networking)
+                    </section>
+
+                    <section>
+                        <h2>2 components</h2>
+                        <ul>
+                            <li class="fragment">Neutron Server (API)
+                                <ul>
+                                    <li>listen on HTTP requests</li>
+                                </ul>
+                            </li>
+                            <li class="fragment">Neutron Agent
+                                <ul>
+                                    <li>run on hypervisor</li>
+                                    <li>wait for orders from API</li>
+                                </ul>
+                            </li>
+                            <li class="fragment">Communicate through MQ</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Example when creating an instance</h2>
+                        <h6>(with a port / IP address)</h6>
+                        <ul>
+                            <li class="fragment">HTTP POST nova-api/instance-with-port</li>
+                            <li class="fragment">Nova API adds info in DB</li>
+                            <li class="fragment">Nova API does HTTP POST neutron-server/port</li>
+                            <li class="fragment">Neutron Server adds info in DB</li>
+                            <li class="fragment">Nova API sends a message to Nova Compute</li>
+                            <li class="fragment">Neutron Server sends a message to Neutron Agent</li>
+                            <li class="fragment">Nova compute starts a QEMU process</li>
+                            <li class="fragment">Neutron Agent configure OpenVSwitch</li>
+                        </ul>
+                    </section>
+                    <section data-markdown data-background="data/smart.gif">
+                        # Too easy!
+                    </section>
+                </section>
+
+                <section data-markdown data-background="data/echec.gif">
+                    # Demo
+                    #### you will see how easy it is
+                </section>
+
+                <section data-background="data/slide.png">
+                    <section data-markdown data-background="data/effet-mouton.jpg">
+                        # What about scale?
+                    </section>
+
+                    <section data-background="data/ovh_datacenter.b.jpg" data-background-color="white">
+                        <h2>OpenStack at OVH</h2>
+                        <ul>
+                            <li class="fragment">350k instances (with ports)</li>
+                            <li class="fragment">19k hypervisors</li>
+                            <li class="fragment">400 racks in 30 datacenters</li>
+                        </ul>
+                    </section>
+
+                    <section data-markdown data-background="data/buzz.gif" data-background-color="black" data-background-size="contain">
+                    </section>
+
+                    <section>
+                        <h2>This is not infinite...</h2>
+                        <ul>
+                            <li class="fragment">Split in 30 separated OpenStack regions</li>
+                            <li class="fragment">1500 hypervisors for the biggest</li>
+                        </ul>
+                    </section>
+                </section>
+
+                <section data-background="data/slide.png">
+                    <section data-markdown data-background="data/robots.gif">
+                        # Automation?
+                    </section>
+
+                    <section data-markdown data-background="data/ovh_servers.b.jpeg" data-background-color="white">
+                        # OVH meat
+                        ### is
+                        # dedicated server
+                        ### Automation is our DNA
+                    </section>
+
+                    <section>
+                        <h2>And also</h2>
+                        <ul>
+                            <li class="fragment">Everything we do is in Git</li>
+                            <li class="fragment">Puppet</li>
+                            <li class="fragment">Ansible</li>
+                            <li class="fragment">K8s (soon)</li>
+                            <li class="fragment">Continuous delivery</li>
+                        </ul>
+                    </section>
+
+                </section>
+
+                <section data-markdown data-background="data/camion_plot.gif">
+                    ## Questions?
+                </section>
+            </div>
+        </div>
+
+        <script src="lib/js/head.min.js"></script>
+        <script src="js/reveal.js"></script>
+
+        <script>
+            // More info https://github.com/hakimel/reveal.js#configuration
+            Reveal.initialize({
+                history: true,
+                slideNumber: 'c/t',
+
+                // More info https://github.com/hakimel/reveal.js#dependencies
+                dependencies: [
+                    { src: 'plugin/markdown/marked.js' },
+                    { src: 'plugin/markdown/markdown.js' },
+                    { src: 'plugin/notes/notes.js', async: true },
+                    { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+                ]
+            });
+        </script>
+    </body>
+</html>
